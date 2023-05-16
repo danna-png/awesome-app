@@ -7,7 +7,8 @@ import express from 'express';
 //cear una instancia de epress
 const app = express(); // (req. res) => {Codigo}
 
-
+//Middleware de parseo de datos del cliente
+app.use(express.urlencoded({extended:true}));
 
 //registrar nuestro primer middleware
 app.use((req, res, next ) => {
@@ -29,6 +30,41 @@ app.use('/about', (req, res) => {
         <p>Es una pagina creada para primer desarrollo web en Fullistack con JS</p>
         `);
 });
+
+//GET / add-product
+app.get('/add-product', (req, res, next)=> {
+//if(req.method === "POST") return next();
+
+
+//sirviendo el formulario
+console.log("Sirviendo al formulario");
+res.send(`
+<form action="/add-product" method ="POST"> 
+<label for="title"> Title </label>
+<input id="title" type="text" name="title">
+
+<label for="descripcion"> Descripcion </label>
+<input id="descripcion" type="text" name="descripcion">
+<button type="submit"> Add Product</button>
+
+</form>
+`);
+});
+
+
+//POST /add-product
+app.post('/add-product', (req,res)=>{
+//realizando extraccion de los datos de la peticion
+for(const prop in req.body){
+    console.log(` ${prop} : ${req.body[prop]}`);
+}
+
+// Redireccionamiento
+res.redirect('/');
+});
+
+
+
 
 app.use((req, res) => {
     console.log("Respondiendo al cliente");
